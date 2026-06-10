@@ -1,62 +1,73 @@
-# Xcode
-#
-# gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
+# ===================================================================
+# Ledgerline .gitignore — Xcode 16 / Swift 6 / SwiftData / CloudKit
+# ===================================================================
 
-## User settings
+# ---- macOS noise ----
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# ---- Xcode user state (NEVER commit — per-developer, churns constantly) ----
 xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
 
-## Obj-C/Swift specific
-*.hmap
-
-## App packaging
+# ---- Build products & derived data ----
+build/
+DerivedData/
 *.ipa
 *.dSYM.zip
 *.dSYM
 
-## Playgrounds
-timeline.xctimeline
-playground.xcworkspace
-
-# Swift Package Manager
-#
-# Add this line if you want to avoid checking in source code from Swift Package Manager dependencies.
-# Packages/
-# Package.pins
-# Package.resolved
-# *.xcodeproj
-#
-# Xcode automatically generates this directory with a .xcworkspacedata file and xcuserdata
-# hence it is not needed unless you have added a package configuration file to your project
-# .swiftpm
-
+# ---- Swift Package Manager ----
+# Keep Package.resolved COMMITTED (reproducible dependency pins).
+# Ignore only local build/workspace artifacts:
+.swiftpm/
 .build/
 
-# CocoaPods
-#
-# We recommend against adding the Pods directory to your .gitignore. However
-# you should judge for yourself, the pros and cons are mentioned at:
-# https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
-#
-# Pods/
-#
-# Add this line if you want to avoid checking in source code from the Xcode workspace
-# *.xcworkspace
+# ---- Playgrounds (scratch work while exploring CloudKit APIs) ----
+timeline.xctimeline
+playground.xcworkspace
+*.playground/playground.xcworkspace
 
-# Carthage
-#
-# Add this line if you want to avoid checking in source code from Carthage dependencies.
-# Carthage/Checkouts
+# ---- Test artifacts ----
+*.xcresult
 
-Carthage/Build/
+# ---- Local database files (Phase 2 "Inspect the SQLite" depth move) ----
+# Any store files copied out of the simulator/device container for
+# inspection stay local — INTERNALS.md documents findings; the raw
+# stores are throwaway evidence, not source.
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.store
+LocalStores/
 
-# fastlane
-#
-# It is recommended to not store the screenshots in the git repo.
-# Instead, use fastlane to re-generate the screenshots whenever they are needed.
-# For more information about the recommended setup visit:
-# https://docs.fastlane.tools/best-practices/source-control/#source-control
+# ---- Secrets & local-only config ----
+# CloudKit needs no API keys (auth rides the iCloud account — that's
+# the point), but keep the habit: anything matching these never lands
+# in a public portfolio repo.
+*.p8
+*.p12
+*.mobileprovision
+*.cer
+.env
+.env.*
+secrets.*
 
+# ---- CI / tooling (future-proofing, harmless now) ----
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# ===================================================================
+# Deliberately COMMITTED (do not add these):
+#   - Ledgerline.xcodeproj/project.pbxproj   (the project itself)
+#   - Package.resolved                        (reproducible builds)
+#   - *.xcscheme in xcshareddata/             (shared schemes → CI)
+#   - docs/, SCHEMA.md, INTERNALS.md, ARCHITECTURE.md (the artifact!)
+# ===================================================================
